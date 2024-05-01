@@ -5,7 +5,6 @@ using EVerywhere.Balance.Domain.Services;
 using EVerywhere.Balance.Infrastructure.Data;
 using EVerywhere.Balance.Infrastructure.Data.Repositories;
 using EVerywhere.Balance.Infrastructure.External.BePaid.Services;
-using EVerywhere.ModulesCommon.Infrastructure.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -18,17 +17,15 @@ public static class DependencyInjection
     public static IServiceCollection AddBalanceInfrastructureServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("Npgsql");
+        var connectionString = configuration.GetConnectionString("Npgsql.EVerywhere.Balance");
         
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
-
-        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-        services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
         services.AddDbContext<BalanceDbContext>((sp, options) =>
         {
             options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(connectionString)
+                .UseSnakeCaseNamingConvention();
         });
         
         services.AddScoped<IBalanceDbContext>(provider => provider.GetRequiredService<BalanceDbContext>());
@@ -36,8 +33,6 @@ public static class DependencyInjection
         services.AddScoped<IPaymentSystemConfigurationService, BePaidConfigurationService>();
         
         services.AddScoped<ApplicationDbContextInitialiser>();
-        
-        services.AddSingleton(TimeProvider.System);
 
         services.AddRepositories();
         services.AddServices();

@@ -11,7 +11,7 @@ public class PaidResourceType : BaseAuditableEntity
     public ICollection<Payment>? Payments { get; set; }
 
     public ICollection<PaymentSystemWidget>? PaymentSystemWidgets { get; set; }
-
+    
     public ICollection<Debtor> Debtors { get; set; }
 
     public ICollection<Receipt> Receipts { get; set; }

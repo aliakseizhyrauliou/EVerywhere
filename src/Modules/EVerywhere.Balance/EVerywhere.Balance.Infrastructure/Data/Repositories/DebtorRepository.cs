@@ -1,9 +1,10 @@
 using EVerywhere.Balance.Application.Interfaces;
 using EVerywhere.Balance.Application.Repositories;
 using EVerywhere.Balance.Domain.Entities;
+using EVerywhere.ModulesCommon.Infrastructure.Repositories.Implementations;
 
 namespace EVerywhere.Balance.Infrastructure.Data.Repositories;
 
-public class DebtorRepository(IBalanceDbContext context) : BaseRepository<Debtor>(context), IDebtorRepository
+public class DebtorRepository(IBalanceDbContext context) : BaseRepository<Debtor, IBalanceDbContext>(context), IDebtorRepository
 {
 }

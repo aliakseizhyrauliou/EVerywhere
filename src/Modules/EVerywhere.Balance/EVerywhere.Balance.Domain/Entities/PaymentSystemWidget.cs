@@ -80,14 +80,14 @@ public class PaymentSystemWidget : BaseAuditableEntity
     /// <summary>
     /// Id холда если есть 
     /// </summary>
-    public int? HoldId { get; set; }
+    public long? HoldId { get; set; }
 
     public Hold? Hold { get; set; }
 
     /// <summary>
     /// Id платежа
     /// </summary>
-    public int? PaymentId { get; set; }
+    public long? PaymentId { get; set; }
 
     public Payment? Payment { get; set; }
 

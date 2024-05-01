@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using EVerywhere.ModulesCommon.Domain.Models;
 using EVerywhere.ModulesCommon.Infrastructure.DbContext;
 using EVerywhere.ModulesCommon.Infrastructure.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EVerywhere.ModulesCommon.Infrastructure.Repositories.Implementations;
@@ -12,29 +13,41 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
     where TEntity : BaseEntity
     where TContext : IDbContext
 {
-    public Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
+    protected readonly TContext _context;
+    protected readonly DbSet<TEntity> _table;
+
+    public BaseRepository(TContext context)
+    {   
+        _context = context;
+        _table = _context.Set<TEntity>();
     }
 
-    public Task<IDbContextTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken token = default)
+    
+    public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _table.AnyAsync(predicate, cancellationToken);
     }
 
-    public Task<TEntity?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+    public async Task<IDbContextTransaction> BeginTransaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+       return await _context.BeginTransactionAsync(isolationLevel, token);
     }
 
-    public Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default)
+    public async Task<TEntity?> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _table.SingleOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    public async Task<List<TEntity>> GetListAsync(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return await _table.ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
+    {
+        return await _table
+            .Where(predicate)
+            .ToListAsync(cancellationToken);
     }
 
     public Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includes)
@@ -42,9 +55,12 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
         throw new NotImplementedException();
     }
 
-    public Task<TEntity> InsertAsync([NotNull]TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> InsertAsync([NotNull]TEntity entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        await _table.AddAsync(entity, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity;
     }
 
     public Task InsertManyAsync([NotNull]IList<TEntity> entities, CancellationToken cancellationToken = default)
@@ -52,9 +68,12 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
         throw new NotImplementedException();
     }
 
-    public Task<TEntity> UpdateAsync([NotNull]TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<TEntity> UpdateAsync([NotNull]TEntity entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        _table.Update(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity;    
     }
 
     public Task UpdateManyAsync([NotNull]IList<TEntity> entities, CancellationToken cancellationToken = default)
@@ -62,15 +81,22 @@ public class BaseRepository<TEntity, TContext> : IBaseRepository<TEntity>
         throw new NotImplementedException();
     }
 
-    public Task DeleteAsync(long id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(long id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var model = await _table.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken: cancellationToken);
+        if(model is null)
+            return;
+        
+        _table.Remove(model);
+        await _context.SaveChangesAsync(cancellationToken);
     }
     
 
-    public Task DeleteAsync([NotNull]TEntity entity, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync([NotNull]TEntity entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        _table.Remove(entity);
+        await _context.SaveChangesAsync(cancellationToken);
+        
     }
 
     public Task DeleteManyAsync([NotNull]IList<TEntity> entities, CancellationToken cancellationToken = default)

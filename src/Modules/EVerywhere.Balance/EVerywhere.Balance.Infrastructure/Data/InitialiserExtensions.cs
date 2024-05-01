@@ -16,7 +16,7 @@ namespace EVerywhere.Balance.Infrastructure.Data;
 
 public static class InitialiserExtensions
 {
-    public static async Task InitialiseDatabaseAsync(this WebApplication app)
+    public static async Task InitialiseBalanceDatabaseAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
 
@@ -118,7 +118,7 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
                     ButtonText = "Привязать карту",
                     Language = "RU",
                     NotificationUrl =
-                        "https://8c3b-185-158-218-163.ngrok-free.app/api/BePaid/verifyHoldNotification",
+                        "https://9db4-185-158-216-74.ngrok-free.app/api/BePaid/verifyHoldNotification",
                     SaveCardToggle = new SaveCardToggle
                     {
                         Display = true,
@@ -156,7 +156,7 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
                     FirstName = "Default FirstName",
                     LastName = "Default LastName"
                 }
-            },
+            }, 
             CheckoutPayment = new Checkout
             {
                 Attempts = 1,
@@ -166,7 +166,7 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
                     ButtonText = "Оплата",
                     Language = "RU",
                     NotificationUrl =
-                        "https://8c3b-185-158-218-163.ngrok-free.app/api/BePaid/verifyPaymentNotification",
+                        "https://9db4-185-158-216-74.ngrok-free.app/api/BePaid/verifyPaymentNotification",
                     SaveCardToggle = new SaveCardToggle
                     {
                         Display = true,
@@ -214,7 +214,7 @@ public class ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitial
                     ButtonText = "Привязать карту",
                     Language = "RU",
                     NotificationUrl =
-                        "https://8c3b-185-158-218-163.ngrok-free.app/api/BePaid/verifyPaymentMethodNotification",
+                        "https://9db4-185-158-216-74.ngrok-free.app/api/BePaid/verifyPaymentMethodNotification",
                     SaveCardToggle = new SaveCardToggle
                     {
                         Display = true,

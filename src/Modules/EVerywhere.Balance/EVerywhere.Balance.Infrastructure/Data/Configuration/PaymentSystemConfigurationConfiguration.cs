@@ -8,6 +8,12 @@ public class PaymentSystemConfigurationConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<PaymentSystemConfiguration> builder)
     {
+        builder.ToTable("payment_system_configurations");
+
+        builder
+            .Property(x => x.Id)
+            .HasColumnName("payment_system_configuration_id");
+        
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.HasMany(x => x.PaymentSystemWidgets)

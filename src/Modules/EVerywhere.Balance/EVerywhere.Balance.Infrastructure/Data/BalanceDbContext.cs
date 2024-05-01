@@ -7,8 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EVerywhere.Balance.Infrastructure.Data;
 
-public class BalanceDbContext(DbContextOptions<BalanceDbContext> options)
-    : DbContext(options), IBalanceDbContext
+public class BalanceDbContext(DbContextOptions<BalanceDbContext> options) : DbContext(options), IBalanceDbContext
 {
     public DbSet<PaymentMethod> PaymentMethods { get; set; }
     public DbSet<Payment> Payments { get; set; }

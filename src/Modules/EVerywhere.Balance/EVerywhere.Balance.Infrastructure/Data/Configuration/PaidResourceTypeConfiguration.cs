@@ -8,6 +8,12 @@ public class PaidResourceTypeConfiguration: IEntityTypeConfiguration<PaidResourc
 {
     public void Configure(EntityTypeBuilder<PaidResourceType> builder)
     {
+        builder.ToTable("paid_resource_type_configurations");
+
+        builder
+            .Property(x => x.Id)
+            .HasColumnName("paid_resource_type_configuration_id");
+        
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.HasMany(x => x.Payments)

@@ -9,6 +9,12 @@ public class PaymentConfiguration :  IEntityTypeConfiguration<Payment>
     
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
+        builder.ToTable("payments");
+
+        builder
+            .Property(x => x.Id)
+            .HasColumnName("payment_id");
+        
         builder.HasQueryFilter(x => !x.IsDeleted);
         
         //Чек

@@ -8,6 +8,12 @@ public class PaymentSystemWidgetGenerationConfiguration : IEntityTypeConfigurati
 {
     public void Configure(EntityTypeBuilder<PaymentSystemWidget> builder)
     {
+        builder.ToTable("payment_system_widget_generations");
+
+        builder
+            .Property(x => x.Id)
+            .HasColumnName("payment_system_widget_generation_id");
+        
         builder.HasQueryFilter(x => !x.IsDeleted);
     }
 }

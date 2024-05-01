@@ -8,6 +8,12 @@ public class HoldConfiguration: IEntityTypeConfiguration<Hold>
 {
     public void Configure(EntityTypeBuilder<Hold> builder)
     {
+        builder.ToTable("holds");
+
+        builder
+            .Property(x => x.Id)
+            .HasColumnName("hold_id");
+        
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.HasMany(x => x.Receipts)

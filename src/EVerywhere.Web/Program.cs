@@ -1,44 +1,39 @@
+using System.Reflection;
+using EVerywhere.Balance.API;
+using EVerywhere.Balance.Infrastructure.Data;
+using EVerywhere.ModulesCommon;
+using EVerywhere.ModulesCommon.Application.Interfaces;
+using EVerywhere.Web.Infrastructure.Extensions;
+using EVerywhere.Web.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Configuration
+    .AddEnvironmentVariables()
+    .AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true);
+
+builder.Services
+    .AddCustomMediator()
+    .AddModulesCommon()
+    .AddBalanceModule(builder.Configuration);
+
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IUser, CurrentUserMock>();
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+await app.InitialiseBalanceDatabaseAsync();
 
-app.UseHttpsRedirection();
+app.UseExceptionHandler(options => { });
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseSwagger();
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+app.UseSwaggerUI();
+
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

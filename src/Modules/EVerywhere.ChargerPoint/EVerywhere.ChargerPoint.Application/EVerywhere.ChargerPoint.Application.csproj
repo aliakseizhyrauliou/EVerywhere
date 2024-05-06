@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="PaymentApi\Dtos\" />
+      <ProjectReference Include="..\EVerywhere.ChargerPoint.Domain\EVerywhere.ChargerPoint.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\ConnectorFeatures\" />
     </ItemGroup>
 
 </Project>

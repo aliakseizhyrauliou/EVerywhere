@@ -4,6 +4,7 @@ using EVerywhere.Balance.Application.Features.PaymentFeature.Commands;
 using EVerywhere.Balance.Infrastructure.Data;
 using EVerywhere.ModulesCommon;
 using EVerywhere.ModulesCommon.Application.Interfaces;
+using EVerywhere.Web;
 using EVerywhere.Web.Infrastructure.Extensions;
 using EVerywhere.Web.Services;
 using FluentValidation;
@@ -19,9 +20,9 @@ builder.Services
     .AddModulesCommon()
     .AddBalanceModule(builder.Configuration);
 
-builder.Services.AddAutoMapper(typeof(CreatePaymentCommand).Assembly);
+builder.Services.AddAutoMapper(ModulesAssemblies.Application);
 
-builder.Services.AddValidatorsFromAssembly(typeof(CreatePaymentCommand).Assembly);
+builder.Services.AddValidatorsFromAssemblies(ModulesAssemblies.Application);
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUser, CurrentUserMock>();

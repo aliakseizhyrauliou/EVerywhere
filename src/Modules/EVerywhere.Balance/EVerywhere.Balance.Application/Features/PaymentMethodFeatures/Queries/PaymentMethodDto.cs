@@ -6,7 +6,7 @@ namespace EVerywhere.Balance.Application.Features.PaymentMethodFeatures.Queries;
 
 public class PaymentMethodDto
 {
-    public int Id { get; set; }
+    public long Id { get; set; }
     /// <summary>
     /// Описание варианта оплаты
     /// </summary>

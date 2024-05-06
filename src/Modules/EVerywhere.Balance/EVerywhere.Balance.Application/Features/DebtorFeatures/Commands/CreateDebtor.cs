@@ -12,7 +12,7 @@ public record CreateDebtorCommand : IRequest<long>
     public required string UserId { get; set; }
 
     public required decimal Amount { get; set; }
-    public int PaymentMethodId { get; set; }
+    public long PaymentMethodId { get; set; }
 
     /// <summary>
     /// Тип платного ресурса

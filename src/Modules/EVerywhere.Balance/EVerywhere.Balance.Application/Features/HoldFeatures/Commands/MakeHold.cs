@@ -18,7 +18,7 @@ public record MakeHoldCommand : IRequest<long>
     public required string OperatorId { get; set; }
     public required decimal Amount { get; set; }
     public required int PaidResourceTypeId { get; set; }
-    public required int PaymentMethodId { get; set; }
+    public required long PaymentMethodId { get; set; }
     public required int PaymentSystemConfigurationId { get; set; }
     public Dictionary<string, string>? AdditionalData { get; set; }
 }

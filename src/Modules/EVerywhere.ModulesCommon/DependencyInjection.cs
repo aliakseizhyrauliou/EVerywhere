@@ -12,26 +12,21 @@ public static class DependencyInjection
     {
         serviceCollection.AddCommonModuleInfrastructure();
 
-        serviceCollection.AddCommonModuleApplication();
-
         return serviceCollection;
     }
 
+    /// <summary>
+    /// Все модули будут использовать Interceptors
+    /// </summary>
+    /// <param name="serviceCollection"></param>
+    /// <returns></returns>
     private static IServiceCollection AddCommonModuleInfrastructure(this IServiceCollection serviceCollection)
     {
         return serviceCollection
             .AddInterceptors()
             .AddSingleton(TimeProvider.System);
     }
-
-    private static IServiceCollection AddCommonModuleApplication(this IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddAutoMapper(Assembly.GetCallingAssembly());
-
-        serviceCollection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
-        return serviceCollection;
-    }
+    
 
     private static IServiceCollection AddInterceptors(this IServiceCollection serviceCollection)
     {

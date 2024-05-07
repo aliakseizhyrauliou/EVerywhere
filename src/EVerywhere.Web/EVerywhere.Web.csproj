@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Modules\EVerywhere.Balance\EVerywhere.Balance.API\EVerywhere.Balance.API.csproj" />
+      <ProjectReference Include="..\Modules\EVerywhere.ChargerPoint\EVerywhere.ChargerPoint.API\EVerywhere.ChargerPoint.API.csproj" />
     </ItemGroup>
 
 </Project>

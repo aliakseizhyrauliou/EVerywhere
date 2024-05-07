@@ -2,6 +2,7 @@ using System.Reflection;
 using EVerywhere.Balance.API;
 using EVerywhere.Balance.Application.Features.PaymentFeature.Commands;
 using EVerywhere.Balance.Infrastructure.Data;
+using EVerywhere.ChargerPoint.API;
 using EVerywhere.ModulesCommon;
 using EVerywhere.ModulesCommon.Application.Interfaces;
 using EVerywhere.Web;
@@ -18,7 +19,8 @@ builder.Configuration
 builder.Services
     .AddCustomMediator()
     .AddModulesCommon()
-    .AddBalanceModule(builder.Configuration);
+    .AddBalanceModule(builder.Configuration)
+    .AddChargerPointModule(builder.Configuration);
 
 builder.Services.AddAutoMapper(ModulesAssemblies.Application);
 

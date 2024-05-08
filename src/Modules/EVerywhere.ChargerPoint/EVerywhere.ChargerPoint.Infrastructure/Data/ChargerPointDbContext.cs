@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EVerywhere.ChargerPoint.Infrastructure.Data;
 
-public class ChargerPointDbContext : DbContext, IChargerPointDbContext
+public class ChargerPointDbContext(DbContextOptions<ChargerPointDbContext> options) : DbContext(options), IChargerPointDbContext
 {
     public async Task MigrateDatabase()
     {

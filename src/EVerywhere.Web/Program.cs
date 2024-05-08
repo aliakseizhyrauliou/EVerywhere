@@ -17,7 +17,7 @@ builder.Configuration
     .AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true);
 
 builder.Services
-    .AddCustomMediator()
+    .AddCustomMediator(ModulesAssemblies.Application)
     .AddModulesCommon()
     .AddBalanceModule(builder.Configuration)
     .AddChargerPointModule(builder.Configuration);
@@ -35,7 +35,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-await app.InitialiseBalanceDatabaseAsync();
+await app.SeedAllDatabases();
 
 app.UseExceptionHandler(options => { });
 

@@ -2,11 +2,12 @@
 using EVerywhere.ChargerPoint.Application.Repositories;
 using EVerywhere.ChargerPoint.Domain.Entities;
 using EVerywhere.ModulesCommon.Application.Interfaces;
+using EVerywhere.ModulesCommon.UseCase;
 using MediatR;
 
 namespace EVerywhere.ChargerPoint.Application.Features.ChargerFeatures.Commands;
 
-public class CreateChargerCommand : IRequest<long>
+public class CreateChargerCommand : IRequest<CreatedEntityDto<long>>
 {
     public string? Address { get; set; }
     public string? OperatorSystemChargerId { get; set; }
@@ -16,9 +17,9 @@ public class CreateChargerCommand : IRequest<long>
 
 
 public class CreateChargerCommandHandler(IChargerRepository chargerRepository, 
-    IUser user) : IRequestHandler<CreateChargerCommand, long>
+    IUser user) : IRequestHandler<CreateChargerCommand, CreatedEntityDto<long>>
 {
-    public async Task<long> Handle(CreateChargerCommand request,
+    public async Task<CreatedEntityDto<long>> Handle(CreateChargerCommand request,
         CancellationToken cancellationToken)
     {
         var charger = new Charger
@@ -33,6 +34,6 @@ public class CreateChargerCommandHandler(IChargerRepository chargerRepository,
 
         await chargerRepository.InsertAsync(charger, cancellationToken);
 
-        return charger.Id;
+        return new CreatedEntityDto<long>(charger.Id);
     }
 }

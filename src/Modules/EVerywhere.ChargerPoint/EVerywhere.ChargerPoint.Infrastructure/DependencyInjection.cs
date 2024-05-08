@@ -27,19 +27,12 @@ public static class DependencyInjection
         });
         
         services.AddScoped<IChargerPointDbContext>(provider => provider.GetRequiredService<ChargerPointDbContext>());
-
+        services.AddScoped<ApplicationDbContextInitialiser>();
         services.AddRepositories();
 
         return services;
     }
 
-
-    /*private static void AddServices(this IServiceCollection services)
-    {
-        services.AddScoped<IPaymentSystemService, BePaidService>();
-        services.AddScoped<IPaymentSystemAuthorizationService, BePaidAuthorizationService>();
-        services.AddScoped<IPaymentSystemConfigurationService, BePaidConfigurationService>();
-    }*/
 
     private static void AddRepositories(this IServiceCollection services)
     {
